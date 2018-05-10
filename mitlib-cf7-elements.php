@@ -38,8 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function add_custom_elements() {
 	wpcf7_add_form_tag( 'authenticate', 'authenticate_handler' );
-	wpcf7_add_form_tag( 'select_dlc', 'dlc_handler' );
-	wpcf7_add_form_tag( 'select_dlc*', 'dlc_required_handler', array( 'name-attr' => true ) );
+	wpcf7_add_form_tag( array( 'select_dlc', 'select_dlc*' ), 'dlc_handler', array( 'name-attr' => true ) );
 }
 add_action( 'wpcf7_init', 'add_custom_elements' );
 
@@ -82,24 +81,14 @@ function authenticate_handler( $tag ) {
  * @param object $tag A WPCF7_FormTag object.
  */
 function dlc_handler( $tag ) {
-	$field = '<span class="wpcf7-form-control-wrap department">';
-	$field .= '<select name="department" class="wpcf7-form-control wpcf7-select">';
-	$field .= file_get_contents( plugin_dir_path( __FILE__ ) . 'templates/select_dlc.html' );
-	$field .= '</select>';
-	$field .= '</span>';
-	return $field;
-}
+	$select = '<select name="department" class="wpcf7-form-control wpcf7-select">';
+	if ( 'select_dlc*' == $tag->type ) {
+		// Required fields need additional attributes.
+		$select = '<select name="department" class="wpcf7-form-control wpcf7-select wpcf7-validates-as-required" aria-required="true" aria-invalid="false">';
+	}
 
-/**
- * DLC selection handler.
- *
- * This returns a select element of MIT departments, labs, and centers.
- *
- * @param object $tag A WPCF7_FormTag object.
- */
-function dlc_required_handler( $tag ) {
 	$field = '<span class="wpcf7-form-control-wrap department">';
-	$field .= '<select name="department" class="wpcf7-form-control wpcf7-select wpcf7-validates-as-required" aria-required="true" aria-invalid="false">';
+	$field .= $select;
 	$field .= file_get_contents( plugin_dir_path( __FILE__ ) . 'templates/select_dlc.html' );
 	$field .= '</select>';
 	$field .= '</span>';
