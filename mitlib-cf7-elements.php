@@ -3,7 +3,7 @@
  * Plugin Name: MITlib CF7 Elements
  * Plugin URI: https://github.com/MITLibraries/mitlib-cf7-elements
  * Description: Adds custom form controls for CF7 needed by the MIT Libraries.
- * Version: 0.0.2
+ * Version: 0.0.3
  * Author: Matt Bernhardt
  * Author URI: https://github.com/matt-bernhardt
  * License: GPL2
