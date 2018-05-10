@@ -69,6 +69,8 @@ add_filter( 'wpcf7_validate_select_dlc*', 'validate_dlc_filter', 20, 2 );
  * @param object $tag A WPCF7_FormTag object.
  */
 function authenticate_handler( $tag ) {
+	// We don't need the WPCF7_FormTag object here.
+	unset( $tag );
 	return '<button name="authenticate" onClick="loginFunctions.doLoginAndRedirect(location.pathname);">Auto-fill form (MIT only)</button>';
 }
 
