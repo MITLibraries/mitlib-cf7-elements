@@ -67,11 +67,6 @@ add_filter( 'wpcf7_validate_select_dlc*', 'identify_required', 20, 2 );
  * @link https://contactform7.com/2015/03/28/custom-validation/
  */
 function validate_dlc_filter( $result, $tag ) {
-	// Check for nonce.
-	if ( empty( $_POST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['_wpnonce'] ), 'wp_rest' ) ) {
-		// This is a nonce problem.
-		$result->invalidate( $tag, 'Your submission may have timed out; please refresh this page and try again.' );
-	}
 	// Has the DLC name been set?
 	if ( empty( $_POST['department'] ) || '' == sanitize_text_field( wp_unslash( $_POST['department'] ) ) ) {
 		$result->invalidate( $tag, 'Please specify your department, lab, or center.' );
