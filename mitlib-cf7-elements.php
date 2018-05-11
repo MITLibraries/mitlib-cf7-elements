@@ -3,7 +3,7 @@
  * Plugin Name: MITlib CF7 Elements
  * Plugin URI: https://github.com/MITLibraries/mitlib-cf7-elements
  * Description: Adds custom form controls for CF7 needed by the MIT Libraries.
- * Version: 0.0.3
+ * Version: 1.0.0
  * Author: Matt Bernhardt
  * Author URI: https://github.com/matt-bernhardt
  * License: GPL2
@@ -39,6 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function add_custom_elements() {
 	wpcf7_add_form_tag( 'authenticate', 'authenticate_handler' );
 	wpcf7_add_form_tag( array( 'select_dlc', 'select_dlc*' ), 'dlc_handler', array( 'name-attr' => true ) );
+	wpcf7_add_form_tag( 'thank_you', 'thank_you_handler', array( 'path-attr' => true ) );
 }
 add_action( 'wpcf7_init', 'add_custom_elements' );
 
@@ -104,5 +105,21 @@ function dlc_handler( $tag ) {
 	$field .= file_get_contents( plugin_dir_path( __FILE__ ) . 'templates/select_dlc.html' );
 	$field .= '</select>';
 	$field .= '</span>';
+	return $field;
+}
+
+/**
+ * Thank you page handler.
+ *
+ * This implements the redirect to a specified thank you page when present.
+ *
+ * @param object $tag A WPCF7_FormTag object.
+ */
+function thank_you_handler( $tag ) {
+	$field = '<script type="text/javascript">';
+	$field .= "  document.addEventListener( 'wpcf7mailsent', function( event ) {";
+	$field .= "    location = '" . $tag['values'][0] . "';";
+	$field .= '  }, false );';
+	$field .= '</script>';
 	return $field;
 }
