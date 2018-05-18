@@ -3,7 +3,7 @@
  * Plugin Name: MITlib CF7 Elements
  * Plugin URI: https://github.com/MITLibraries/mitlib-cf7-elements
  * Description: Adds custom form controls for CF7 needed by the MIT Libraries.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Matt Bernhardt
  * Author URI: https://github.com/matt-bernhardt
  * License: GPL2
@@ -74,6 +74,29 @@ function validate_dlc_filter( $result, $tag ) {
 	}
 	return $result;
 }
+
+/**
+ * Implements custom validation for radio fields.
+ *
+ * @param object $result A WPCF7_Validation object.
+ * @param object $tag    A WPCF7_FormTag object.
+ * @link https://contactform7.com/2015/03/28/custom-validation/
+ * @link https://wordpress.org/support/topic/protection-against-form-hijacking/
+ */
+function validate_options( $result, $tag ) {
+	// Check if the field value is not empty.
+	if ( ! empty( $_POST[ $tag->name ] ) ) {
+		// Look up the received value in the array of expected values.
+		$value = sanitize_text_field( wp_unslash( $_POST[ $tag->name ] ) );
+		if ( ! in_array( $value, $tag->values ) ) {
+			$result->invalidate( $tag, 'Unexpected value received' );
+		}
+	}
+	return $result;
+}
+add_filter( 'wpcf7_validate_radio', 'validate_options', 20, 2 );
+add_filter( 'wpcf7_validate_select', 'validate_options', 20, 2 );
+add_filter( 'wpcf7_validate_select*', 'validate_options', 20, 2 );
 
 /**
  * Authenticate button handler.
