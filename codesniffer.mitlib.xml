@@ -23,5 +23,8 @@
 		<exclude name="WordPress.Utils" />
 		<exclude name="WordPress.WP" />
 		<exclude name="WordPress.WhiteSpace" />
+		<!-- Whitelisted per https://wordpress.org/support/topic/dealing-with-nonces-inside-a-custom-validation-function/ -->
+		<exclude name="WordPress.Security.NonceVerification.Missing" />
+		<exclude name="WordPress.Security.NonceVerification.NoNonceVerification" />
 	</rule>
 </ruleset>
