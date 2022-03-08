@@ -3,7 +3,7 @@
  * Plugin Name: MITlib CF7 Elements
  * Plugin URI: https://github.com/MITLibraries/mitlib-cf7-elements
  * Description: Adds custom form controls for CF7 needed by the MIT Libraries.
- * Version: 1.1.0
+ * Version: 1.2.0-beta1
  * Author: Matt Bernhardt
  * Author URI: https://github.com/matt-bernhardt
  * License: GPL2
@@ -63,13 +63,18 @@ add_filter( 'wpcf7_validate_select_dlc*', 'identify_required', 20, 2 );
 /**
  * Implements custom validation for DLC selection.
  *
+ * Please note that this function does not check for nonces due to a design
+ * decision by CF7 not to use them by default.
+ *
  * @param object $result A WPCF7_Validation object.
  * @param object $tag    A WPCF7_FormTag object.
  * @link https://contactform7.com/2015/03/28/custom-validation/
  */
 function validate_dlc_filter( $result, $tag ) {
 	// Has the DLC name been set?
+    // phpcs:disable WordPress.Security.NonceVerification.Missing
 	if ( empty( $_POST['department'] ) || '' == sanitize_text_field( wp_unslash( $_POST['department'] ) ) ) {
+        // phpcs:enable
 		$result->invalidate( $tag, 'Please specify your department, lab, or center.' );
 	}
 	return $result;
@@ -78,6 +83,9 @@ function validate_dlc_filter( $result, $tag ) {
 /**
  * Implements custom validation for radio fields.
  *
+ * Please note that this function does not check for nonces due to a design
+ * decision by CF7 not to use them by default.
+ *
  * @param object $result A WPCF7_Validation object.
  * @param object $tag    A WPCF7_FormTag object.
  * @link https://contactform7.com/2015/03/28/custom-validation/
@@ -85,9 +93,11 @@ function validate_dlc_filter( $result, $tag ) {
  */
 function validate_options( $result, $tag ) {
 	// Check if the field value is not empty.
+    // phpcs:disable WordPress.Security.NonceVerification.Missing
 	if ( ! empty( $_POST[ $tag->name ] ) ) {
 		// Look up the received value in the array of expected values.
 		$value = sanitize_text_field( wp_unslash( $_POST[ $tag->name ] ) );
+        // phpcs:enable
 		if ( ! in_array( $value, $tag->values ) ) {
 			$result->invalidate( $tag, 'Unexpected value received' );
 		}
