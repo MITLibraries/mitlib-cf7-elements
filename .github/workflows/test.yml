@@ -50,8 +50,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Install WP Tests
-      run: |
-      ./bin/install-wp-tests.sh wordpress_unit_tests root '' localhost latest
+      run: ./bin/install-wp-tests.sh wordpress_unit_tests root '' localhost latest
 
     - name: Run unit tests
       run: ./vendor/bin/phpunit
